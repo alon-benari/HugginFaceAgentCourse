@@ -1,0 +1,7 @@
+echo "# HugginFaceAgentCourse" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/alon-benari/HugginFaceAgentCourse.git
+git push -u origin main
