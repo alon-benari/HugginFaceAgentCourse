@@ -7,7 +7,12 @@ from dataclasses import dataclass
 
 # Load Hugging Face spam detection model
 
-classifier = pipeline("text-classification", model="mrm8488/bert-tiny-finetuned-sms-spam-detection")
+classifier = pipeline("text-classification", model="facebook/bart-large-mnli")
+#classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+#classifier = pipeline("text-classification", model="distilbert-base-uncased-finetuned-sst-2-english")
+
+
+
 
 # Define structured state
 #@dataclass
@@ -19,7 +24,9 @@ class MessageState(TypedDict):
 
 # Define nodes
 def classify_message(state: MessageState) -> MessageState:
+
     print(f"Received state: {state}")
+    labels = ["spam", "ham"]
     if 'message' not in state:
         raise KeyError("The 'message' key is missing from the state.")
     result = classifier(state['message'])[0]
@@ -64,9 +71,10 @@ def spam_or_ham(state: MessageState) -> str:
     return "spam" if state.classification == "spam" else "ham"
 
 
-initial_state = MessageState(message="Congratulations! You won a prize. Click here!", 
+#initial_state = MessageState(message="Congratulations! You won a prize. Click here!", 
+                           #  classification= "Unknown")
+initial_state = MessageState(message="USA has 50 states.", 
                              classification= "Unknown")
-
 
 
 graph = StateGraph(MessageState)
